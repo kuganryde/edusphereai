@@ -1,5 +1,14 @@
 .streamlit/secrets.toml
 
+# SentryVision AI runtime data: SQLite DB, saved snapshots, downloaded model
+# weights, and user-editable settings/zones — all machine-local, not source.
+/data/*.db
+/data/*.json
+/data/snapshots/*.jpg
+/data/models/*.pt
+!/data/.gitkeep
+!/data/snapshots/.gitkeep
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

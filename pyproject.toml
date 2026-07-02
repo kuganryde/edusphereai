@@ -1,12 +1,40 @@
 [project]
-name = "blank-app-template"
-version = "0.1.0"
-description = "A simple Streamlit app template."
+name = "sentryvision-ai"
+version = "1.0.0"
+description = "SentryVision AI — an AI-powered CCTV surveillance and analysis platform for guard and sentry houses, built entirely in Python."
 readme = "README.md"
-requires-python = ">=3.14"
+requires-python = ">=3.11"
 dependencies = [
     "streamlit>=1.58.0",
+    "opencv-python-headless>=4.10.0,<5",
+    "ultralytics>=8.3.0",
+    "numpy>=1.26.0",
+    "pandas>=2.2.0",
+    "plotly>=5.24.0",
+    "requests>=2.32.0",
+    "pillow>=10.4.0",
 ]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.3.0",
+]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]
 
 [tool.uv]
 package = false
+# ultralytics pulls in GUI opencv-python; constrain it to a version with
+# manylinux wheels and let opencv-python-headless (our explicit, GUI-free
+# dependency) be the one actually imported at runtime.
+constraint-dependencies = [
+    "opencv-python>=4.10.0,<5",
+]
+# NOTE: on a CPU-only guard-house workstation or Streamlit Cloud, installing
+# torch from the PyTorch CPU wheel index instead of PyPI cuts this install
+# from ~5GB to a few hundred MB (no CUDA runtime bundled). See README's
+# "Lightweight / CPU-only install" section for the one-line command — it's
+# left as an opt-in step rather than a hard pin here so `uv sync` keeps
+# working out of the box on every network.
