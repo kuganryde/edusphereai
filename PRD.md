@@ -76,7 +76,10 @@ supervisor can operate, not a research script.
   (`cv2.VideoCapture` device index).
 - **RTSP / IP camera** — the standard protocol used by real CCTV hardware;
   connection is bounded to a 5s timeout so a bad URL fails fast with a
-  clear error instead of freezing the UI.
+  clear error instead of freezing the UI. Forced over TCP transport by
+  default to avoid the frame corruption/dropped-connection errors that
+  RTSP's default UDP transport produces on lossy Wi-Fi/consumer-camera
+  links.
 - **Uploaded video file** — for reviewing recorded footage or testing
   configuration changes against a known clip; loops continuously.
 - **Simulated demo scene** — a procedurally generated guard-house gate

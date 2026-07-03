@@ -206,6 +206,20 @@ timeout — observed hangs of 30s+ before failing. `RTSPSource` and
 constructor overload so a bad camera URL fails fast with a clear "could
 not connect" message instead of freezing Start Monitoring.
 
+### 4.10 RTSP forced over TCP
+
+RTSP defaults to UDP transport, which has no retransmission — any packet
+lost to Wi-Fi interference or bandwidth contention corrupts that frame's
+H.264 bitstream. FFmpeg (which OpenCV's RTSP backend wraps) surfaces this
+as `reference picture missing during reorder`, `mmco: unref short
+failure`, and macroblock decode errors in the console, and can present as
+garbled frames or a dropped connection in the UI. `RTSPSource` sets
+`OPENCV_FFMPEG_CAPTURE_OPTIONS=rtsp_transport;tcp` (via `os.environ.
+setdefault`, so it never overrides a value an operator has deliberately
+set) before opening the capture, trading a little latency for TCP's
+packet retransmission — eliminating this failure mode on typical
+Wi-Fi/consumer-camera setups.
+
 ## 5. Persistence
 
 SQLite (`data/sentryvision.db`), two tables:

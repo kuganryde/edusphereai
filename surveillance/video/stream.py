@@ -8,6 +8,7 @@ rest of the application never needs to know where the pixels came from.
 from __future__ import annotations
 
 import math
+import os
 import time
 from abc import ABC, abstractmethod
 from pathlib import Path
@@ -109,6 +110,16 @@ class RTSPSource(_OpenCVSource):
     CCTV integration path."""
 
     def __init__(self, url: str) -> None:
+        # RTSP defaults to UDP transport, which silently drops packets on any
+        # network hiccup (Wi-Fi interference, bandwidth contention) — this is
+        # what produces FFmpeg's "reference picture missing during reorder" /
+        # "mmco: unref short failure" / macroblock decode errors once a frame
+        # arrives corrupted or out of order. Forcing TCP makes the OS
+        # retransmit lost packets instead, trading a little latency for a
+        # much cleaner stream. `setdefault` so an operator who has
+        # deliberately set this env var (e.g. to force UDP for lower latency
+        # on a rock-solid wired link) isn't overridden.
+        os.environ.setdefault("OPENCV_FFMPEG_CAPTURE_OPTIONS", "rtsp_transport;tcp")
         super().__init__(url, label=f"IP Camera ({url})", loop=False,
                           api_preference=cv2.CAP_FFMPEG, timeout_ms=5000)
 
