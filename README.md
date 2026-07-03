@@ -34,6 +34,15 @@ a single Streamlit app.
 
 ## Quickstart
 
+### Windows
+
+Double-click **`run.bat`** in the project folder. It installs `uv` if it's
+missing, syncs dependencies, and starts the app at `http://localhost:8501` —
+no manual setup required. Leave the window open while using the app; close
+it (or press `Ctrl+C` inside it) to stop.
+
+### macOS / Linux
+
 Prerequisite: install [`uv`](https://docs.astral.sh/uv/) if you don't
 already have it:
 

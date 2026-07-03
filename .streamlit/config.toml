@@ -6,8 +6,5 @@ secondaryBackgroundColor = "#FFFFFF"
 textColor = "#1E2A24"
 font = "sans serif"
 
-[server]
-headless = true
-
 [browser]
 gatherUsageStats = false
