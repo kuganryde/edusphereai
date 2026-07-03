@@ -37,9 +37,10 @@ a single Streamlit app.
 ### Windows
 
 Double-click **`run.bat`** in the project folder. It installs `uv` if it's
-missing, syncs dependencies, and starts the app at `http://localhost:8501` —
-no manual setup required. Leave the window open while using the app; close
-it (or press `Ctrl+C` inside it) to stop.
+missing, pulls the latest changes if the folder is a git clone, syncs
+dependencies, and starts the app at `http://localhost:8501` — no manual
+setup required. Leave the window open while using the app; close it (or
+press `Ctrl+C` inside it) to stop.
 
 ### macOS / Linux
 
