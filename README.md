@@ -34,6 +34,16 @@ a single Streamlit app.
 
 ## Quickstart
 
+### Windows
+
+Double-click **`run.bat`** in the project folder. It installs `uv` if it's
+missing, pulls the latest changes if the folder is a git clone, syncs
+dependencies, and starts the app at `http://localhost:8501` — no manual
+setup required. Leave the window open while using the app; close it (or
+press `Ctrl+C` inside it) to stop.
+
+### macOS / Linux
+
 Prerequisite: install [`uv`](https://docs.astral.sh/uv/) if you don't
 already have it:
 
@@ -73,6 +83,27 @@ build instead — same code, a few hundred MB instead of several gigabytes:
 uv sync
 uv pip install torch --index-url https://download.pytorch.org/whl/cpu --reinstall
 ```
+
+## Running with Docker
+
+A multi-stage `Dockerfile` is included (CPU-only PyTorch baked in, runs as a
+non-root user, persists data via a volume):
+
+```
+docker build -t sentryvision-ai .
+docker run -p 8501:8501 -v sentryvision-data:/app/data sentryvision-ai
+```
+
+Open `http://localhost:8501`. The `-v sentryvision-data:/app/data` volume
+persists the SQLite DB, zones, settings, snapshots, and downloaded model
+weights across container restarts — omit it for a fully ephemeral container.
+
+This is *not* a good fit for Vercel or other serverless platforms: Streamlit
+needs a persistent server process with a long-lived WebSocket connection,
+which serverless functions don't provide. Use a container host that runs
+persistent services instead — Render, Railway, Fly.io, a VPS, or Streamlit
+Community Cloud (which doesn't need Docker at all — it deploys straight from
+this GitHub repo).
 
 ## Running tests
 

@@ -116,10 +116,10 @@ if st.session_state.monitoring_active and st.session_state.get("frame_source") i
     zones = get_zones()
 
     video_col, side_col = st.columns([3, 1])
-    with video_col:
+    with video_col, st.container(border=True, key="card_video"):
         frame_placeholder = st.empty()
         stats_placeholder = st.empty()
-    with side_col:
+    with side_col, st.container(border=True, key="card_alert_feed"):
         st.markdown("##### 🚨 Live Alert Feed")
         alerts_placeholder = st.empty()
     audio_placeholder = st.empty()
@@ -127,6 +127,7 @@ if st.session_state.monitoring_active and st.session_state.get("frame_source") i
     last_log_time = 0.0
     frame_times: deque[float] = deque(maxlen=30)
     beep_counter = 0
+    prev_objects = prev_tracks = prev_alerts = 0
 
     while st.session_state.monitoring_active:
         frame = source.read()
@@ -179,12 +180,20 @@ if st.session_state.monitoring_active and st.session_state.get("frame_source") i
 
         frame_placeholder.image(cv2.cvtColor(display, cv2.COLOR_BGR2RGB), width="stretch")
 
+        object_count = len(detections)
+        track_count = system.tracker.active_count()
+        alert_count = len(st.session_state.recent_alerts)
+
         with stats_placeholder.container():
             m1, m2, m3, m4 = st.columns(4)
-            m1.metric("Objects in Frame", len(detections))
-            m2.metric("Active Tracks", system.tracker.active_count())
-            m3.metric("Session Alerts", len(st.session_state.recent_alerts))
+            m1.metric("Objects in Frame", object_count, delta=object_count - prev_objects, delta_color="off")
+            m2.metric("Active Tracks", track_count, delta=track_count - prev_tracks, delta_color="off")
+            new_alerts = alert_count - prev_alerts
+            m3.metric("Session Alerts", alert_count, delta=new_alerts if new_alerts > 0 else None,
+                      delta_color="inverse")
             m4.metric("FPS", f"{fps:.1f}")
+
+        prev_objects, prev_tracks, prev_alerts = object_count, track_count, alert_count
 
         with alerts_placeholder.container():
             if not st.session_state.recent_alerts:

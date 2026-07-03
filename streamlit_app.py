@@ -10,12 +10,16 @@ from __future__ import annotations
 
 import streamlit as st
 
+from theme import inject_theme
+
 st.set_page_config(
     page_title="SentryVision AI",
     page_icon="🛡️",
     layout="wide",
     initial_sidebar_state="expanded",
 )
+
+inject_theme()
 
 live_monitor = st.Page("pages/1_live_monitor.py", title="Live Monitor", icon="🎥", default=True)
 zone_editor = st.Page("pages/2_zone_editor.py", title="Zone Editor", icon="🗺️")

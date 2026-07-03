@@ -1,0 +1,24 @@
+.git
+.github
+.devcontainer
+.venv
+.pytest_cache
+__pycache__
+**/__pycache__
+*.pyc
+.streamlit/secrets.toml
+
+# Runtime data — should come from a mounted volume, not baked into the image.
+data/*.db
+data/*.json
+data/snapshots/*.jpg
+data/models/*.pt
+
+tests
+docs
+PRD.md
+README.md
+LICENSE
+
+Dockerfile
+.dockerignore
