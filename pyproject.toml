@@ -5,12 +5,12 @@ description = "SentryVision AI — an AI-powered CCTV surveillance and analysis 
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
-    "streamlit>=1.58.0",
-    "opencv-python-headless>=4.10.0,<5",
-    "ultralytics>=8.3.0",
+    "streamlit>=1.60.0",
+    "opencv-python-headless>=5.0.0.93,<6",
+    "ultralytics>=8.4.104",
     "numpy>=1.26.0",
-    "pandas>=2.2.0",
-    "plotly>=5.24.0",
+    "pandas>=3.0.5",
+    "plotly>=6.9.0",
     "requests>=2.32.0",
     "pillow>=10.4.0",
 ]
